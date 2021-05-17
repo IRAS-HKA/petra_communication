@@ -9,6 +9,8 @@ Keyboard::Keyboard() : Node("Keyboard")
     barcode_string_publisher_ = create_publisher<std_msgs::msg::String>("Barcode_str", 10);
 
     stop_publisher_ = create_publisher<std_msgs::msg::Empty>("Stop", 10);
+
+    RCLCPP_INFO(get_logger(), "Keyboard node started, type text to publish in ROS. \nCommands: /stop, /b<barcode>, /p<password>");
 }
 
 void Keyboard::io_thread()
