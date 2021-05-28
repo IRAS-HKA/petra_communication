@@ -29,9 +29,9 @@ ARG GIT_USERNAME $GIT_USERNAME
 ARG GIT_PASSWORD $GIT_PASSWORD
 
 WORKDIR /home
-RUN mkdir -p $GIT_USERNAME/ros2_ws/src
+RUN mkdir -p petra/ros2_ws/src
 
-WORKDIR /home/$GIT_USERNAME/ros2_ws/src
+WORKDIR /home/petra/ros2_ws/src
 
 
 RUN git clone -b dev https://$GIT_USERNAME:$GIT_PASSWORD@www.w.hs-karlsruhe.de/gitlab/iras/research-projects/petra/petra_interfaces.git
@@ -39,13 +39,13 @@ RUN git clone -b dev https://$GIT_USERNAME:$GIT_PASSWORD@www.w.hs-karlsruhe.de/g
 
 COPY . ./petra_communication
 
-WORKDIR /home/$GIT_USERNAME/ros2_ws/src/ros_core
+WORKDIR /home/petra/ros2_ws/src/ros_core
 RUN git clone https://$GIT_USERNAME:$GIT_PASSWORD@www.w.hs-karlsruhe.de/gitlab/iras/core/cpp_core.git
 
 
-WORKDIR /home/$GIT_USERNAME/ros2_ws/
+WORKDIR /home/petra/ros2_ws/
 RUN	/bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; colcon build"
-RUN echo "source /home/$GIT_USERNAME/ros2_ws/install/setup.bash" >> ~/.bashrc
+RUN echo "source /home/petra/ros2_ws/install/setup.bash" >> ~/.bashrc
 
 
 
