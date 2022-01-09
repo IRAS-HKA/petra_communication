@@ -18,26 +18,26 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(ros_core REQUIRED)
+find_package(cpp_core REQUIRED)
 find_package(petra_interfaces REQUIRED)
 
 include_directories(
   include
-  ${ros_core_INCLUDE_DIR}
+  ${cpp_core_INCLUDE_DIR}
 )
 
 set(DEPENDENCIES 
     "rclcpp"
-    "ros_core"
+    "cpp_core"
     "petra_interfaces"
 )
 
 add_executable(Communication src/Communication.cpp)
-target_link_libraries(Communication ros_core::ros_core_lib)
+target_link_libraries(Communication cpp_core::cpp_core_lib)
 ament_target_dependencies(Communication ${DEPENDENCIES})
 
 add_executable(Screen src/Screen.cpp)
-target_link_libraries(Screen ros_core::ros_core_lib)
+target_link_libraries(Screen cpp_core::cpp_core_lib)
 ament_target_dependencies(Screen ${DEPENDENCIES})
 
 add_executable(Keyboard src/Keyboard.cpp)
