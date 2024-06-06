@@ -18,26 +18,21 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(cpp_core REQUIRED)
-find_package(petra_interfaces REQUIRED)
+find_package(aip_interfaces REQUIRED)
 
 include_directories(
   include
-  ${cpp_core_INCLUDE_DIR}
 )
 
 set(DEPENDENCIES 
     "rclcpp"
-    "cpp_core"
-    "petra_interfaces"
+    "aip_interfaces"
 )
 
 add_executable(Communication src/Communication.cpp)
-target_link_libraries(Communication cpp_core::cpp_core_lib)
 ament_target_dependencies(Communication ${DEPENDENCIES})
 
 add_executable(Screen src/Screen.cpp)
-target_link_libraries(Screen cpp_core::cpp_core_lib)
 ament_target_dependencies(Screen ${DEPENDENCIES})
 
 add_executable(Keyboard src/Keyboard.cpp)

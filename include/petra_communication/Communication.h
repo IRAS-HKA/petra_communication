@@ -16,10 +16,9 @@
 #include <std_msgs/msg/empty.hpp>
 #include <std_msgs/msg/string.hpp>
 
-#include <cpp_core/default.h>
-#include <petra_interfaces/srv/user_dialog.hpp>
+#include <aip_interfaces/srv/user_dialog.hpp>
 
-using UserDialog = petra_interfaces::srv::UserDialog;
+using UserDialog = aip_interfaces::srv::UserDialog;
 
 class Communication : public rclcpp::Node
 {
@@ -40,7 +39,7 @@ private:
     void publish_text_(std::string);
 
     void print_header_(const std::shared_ptr<UserDialog::Request> request);
-    void print_info_(const petra_interfaces::msg::DialogDataType &data);
+    void print_info_(const aip_interfaces::msg::DialogDataType &data);
 
     std::string remove_zeros_(std::string float_str);
 };

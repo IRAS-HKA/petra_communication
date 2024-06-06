@@ -12,10 +12,7 @@
 
 #include <std_msgs/msg/string.hpp>
 
-#include <cpp_core/default.h>
-#include <cpp_core/Component.h>
-
-class Screen : public rclcpp::Node, public Component
+class Screen : public rclcpp::Node
 {
 public:
     Screen();

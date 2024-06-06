@@ -1,7 +1,7 @@
 /** *******************************************************
  * PeTRA - University of Applied Sciences Karlsruhe
  * Module : ROS2-Node "Keyboard"
- * Purpose : Reads keyboard inputs from the terminal and 
+ * Purpose : Reads keyboard inputs from the terminal and
  *           pubishes them in topic "InputString".
  *
  * @author Andreas Zachariae
@@ -15,8 +15,6 @@
 
 #include <std_msgs/msg/string.hpp>
 #include <std_msgs/msg/empty.hpp>
-
-#include <cpp_core/default.h>
 
 class Keyboard : public rclcpp::Node
 {

@@ -7,21 +7,22 @@ Communication::Communication() : Node("Communication")
     input_options_.callback_group = create_callback_group(rclcpp::callback_group::CallbackGroupType::MutuallyExclusive);
 
     input_string_subscription_ = create_subscription<std_msgs::msg::String>(
-        "InputString", 10, [&](const std_msgs::msg::String::SharedPtr msg) {
+        "InputString", 10, [&](const std_msgs::msg::String::SharedPtr msg)
+        {
             //RCLCPP_INFO(get_logger(), "I heard: '%s'", msg->data.c_str());
-            input_buffer_.push_back(msg->data);
-        },
+            input_buffer_.push_back(msg->data); },
         input_options_);
 
     stop_subscription_ = create_subscription<std_msgs::msg::Empty>(
-        "Stop", 10, [&](const std_msgs::msg::Empty::SharedPtr) {
+        "Stop", 10, [&](const std_msgs::msg::Empty::SharedPtr)
+        {
             stop_recieved_ = true;
-            RCLCPP_WARN(get_logger(), "Stop recieved, resetting service...");
-        },
+            RCLCPP_WARN(get_logger(), "Stop recieved, resetting service..."); },
         input_options_);
 
     dialog_service_ = create_service<UserDialog>(
-        "UserDialog", [&](const std::shared_ptr<UserDialog::Request> request, std::shared_ptr<UserDialog::Response> response) {
+        "UserDialog", [&](const std::shared_ptr<UserDialog::Request> request, std::shared_ptr<UserDialog::Response> response)
+        {
             stop_recieved_ = false;
 
             RCLCPP_INFO(get_logger(), "Incoming request. Waiting for input data...");
@@ -30,7 +31,7 @@ Communication::Communication() : Node("Communication")
 
             for (unsigned int i = 0; (i < request->data_keys.size()) && rclcpp::ok() && !stop_recieved_; i++)
             {
-                petra_interfaces::msg::DialogDataType data = request->data_keys.at(i);
+                aip_interfaces::msg::DialogDataType data = request->data_keys.at(i);
 
                 print_info_(data);
 
@@ -54,7 +55,7 @@ Communication::Communication() : Node("Communication")
 
                     switch (data.type)
                     {
-                    case petra_interfaces::msg::DialogDataType::BOOL:
+                    case aip_interfaces::msg::DialogDataType::BOOL:
                         if (input_buffer_.back() == "y")
                         {
                             input_buffer_.back() = "true";
@@ -69,7 +70,7 @@ Communication::Communication() : Node("Communication")
                             continue;
                         }
                         break;
-                    case petra_interfaces::msg::DialogDataType::INT:
+                    case aip_interfaces::msg::DialogDataType::INT:
                         int int_input;
                         try
                         {
@@ -99,7 +100,7 @@ Communication::Communication() : Node("Communication")
                         {
                         }
                         break;
-                    case petra_interfaces::msg::DialogDataType::FLOAT:
+                    case aip_interfaces::msg::DialogDataType::FLOAT:
                         float float_input;
                         try
                         {
@@ -129,7 +130,7 @@ Communication::Communication() : Node("Communication")
                         {
                         }
                         break;
-                    case petra_interfaces::msg::DialogDataType::STRING:
+                    case aip_interfaces::msg::DialogDataType::STRING:
                         try
                         {
                             if ((input_buffer_.at(i).size() < (std::size_t)std::stoi(min)) | (input_buffer_.at(i).size() > (std::size_t)std::stoi(max)))
@@ -156,8 +157,7 @@ Communication::Communication() : Node("Communication")
                 response->data_values.push_back(input_buffer_.back());
                 RCLCPP_INFO(get_logger(), "Recieved data value: [%s]", input_buffer_.back().c_str());
                 input_buffer_.pop_back();
-            }
-        });
+            } });
 }
 
 void Communication::publish_text_(std::string text)
@@ -165,7 +165,7 @@ void Communication::publish_text_(std::string text)
     auto message = std_msgs::msg::String();
     message.data = text;
 
-    //RCLCPP_INFO(get_logger(), "Publishing: '%s'", message.data.c_str());
+    // RCLCPP_INFO(get_logger(), "Publishing: '%s'", message.data.c_str());
     display_string_publisher_->publish(message);
 }
 
@@ -194,7 +194,7 @@ void Communication::print_header_(const std::shared_ptr<UserDialog::Request> req
     }
 }
 
-void Communication::print_info_(const petra_interfaces::msg::DialogDataType &data)
+void Communication::print_info_(const aip_interfaces::msg::DialogDataType &data)
 {
     std::string min = data.min;
     std::string max = data.max;
@@ -209,7 +209,7 @@ void Communication::print_info_(const petra_interfaces::msg::DialogDataType &dat
 
     switch (data.type)
     {
-    case petra_interfaces::msg::DialogDataType::BOOL:
+    case aip_interfaces::msg::DialogDataType::BOOL:
         type_info += "bool, y or n";
 
         if (default_value != "")
@@ -217,7 +217,7 @@ void Communication::print_info_(const petra_interfaces::msg::DialogDataType &dat
             type_info += ", default = " + default_value;
         }
         break;
-    case petra_interfaces::msg::DialogDataType::INT:
+    case aip_interfaces::msg::DialogDataType::INT:
         type_info += "int";
 
         if (min != "" && max != "")
@@ -230,7 +230,7 @@ void Communication::print_info_(const petra_interfaces::msg::DialogDataType &dat
             type_info += ", default = " + default_value;
         }
         break;
-    case petra_interfaces::msg::DialogDataType::FLOAT:
+    case aip_interfaces::msg::DialogDataType::FLOAT:
         type_info += "float";
 
         if (min != "" && max != "")
@@ -243,7 +243,7 @@ void Communication::print_info_(const petra_interfaces::msg::DialogDataType &dat
             type_info += ", default = " + remove_zeros_(default_value);
         }
         break;
-    case petra_interfaces::msg::DialogDataType::STRING:
+    case aip_interfaces::msg::DialogDataType::STRING:
         type_info += "string";
 
         if (min != "" && max != "")
