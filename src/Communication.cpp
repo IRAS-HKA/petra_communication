@@ -4,7 +4,7 @@ Communication::Communication() : Node("Communication")
 {
     display_string_publisher_ = create_publisher<std_msgs::msg::String>("DisplayString", 10);
 
-    input_options_.callback_group = create_callback_group(rclcpp::callback_group::CallbackGroupType::MutuallyExclusive);
+    input_options_.callback_group = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
     input_string_subscription_ = create_subscription<std_msgs::msg::String>(
         "InputString", 10, [&](const std_msgs::msg::String::SharedPtr msg)
@@ -158,6 +158,8 @@ Communication::Communication() : Node("Communication")
                 RCLCPP_INFO(get_logger(), "Recieved data value: [%s]", input_buffer_.back().c_str());
                 input_buffer_.pop_back();
             } });
+
+    RCLCPP_INFO(get_logger(), "Communication node started successfully.");
 }
 
 void Communication::publish_text_(std::string text)
