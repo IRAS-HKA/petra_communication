@@ -4,13 +4,20 @@ Keyboard::Keyboard() : Node("Keyboard")
 {
     input_string_publisher_ = create_publisher<std_msgs::msg::String>("InputString", 10);
 
-    password_string_publisher_ = create_publisher<std_msgs::msg::String>("Password_str", 10);
-
-    barcode_string_publisher_ = create_publisher<std_msgs::msg::String>("Barcode_str", 10);
-
     stop_publisher_ = create_publisher<std_msgs::msg::Empty>("Stop", 10);
 
-    RCLCPP_INFO(get_logger(), "Keyboard node started, type text to publish in ROS. \nCommands: /stop, /b<barcode>, /p<password>");
+    display_string_subscription_ = create_subscription<std_msgs::msg::String>("DisplayString", 10, [&](const std_msgs::msg::String::SharedPtr msg)
+                                                                              {
+        std::stringstream stream(msg->data);
+
+        while (stream.good())
+        {
+            std::string line;
+            std::getline(stream, line);
+            RCLCPP_INFO(get_logger(), "Recieved: '%s'", line.c_str());
+        } });
+
+    RCLCPP_INFO(get_logger(), "Keyboard node started successfully. \nType text here to publish in ROS2. \nCommands: /stop");
 }
 
 void Keyboard::io_thread()
@@ -30,18 +37,6 @@ void Keyboard::io_thread()
 
                 stop_publisher_->publish(std_msgs::msg::Empty());
             }
-            else if (input.at(1) == 'p')
-            {
-                RCLCPP_INFO(get_logger(), "Password sent");
-
-                password_string_publisher_->publish(message);
-            }
-            else if (input.at(1) == 'b')
-            {
-                RCLCPP_INFO(get_logger(), "Barcode: '%s'", input.c_str());
-
-                barcode_string_publisher_->publish(message);
-            }
             else
             {
                 RCLCPP_WARN(get_logger(), "Unknown command: '%s'", input.c_str());
@@ -49,7 +44,7 @@ void Keyboard::io_thread()
         }
         else
         {
-            RCLCPP_INFO(get_logger(), "Publishing: '%s'", input.c_str());
+            RCLCPP_INFO(get_logger(), "Publish:  '%s'", input.c_str());
 
             input_string_publisher_->publish(message);
         }

@@ -25,7 +25,6 @@ public:
 
 private:
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr input_string_publisher_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr password_string_publisher_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr barcode_string_publisher_;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr display_string_subscription_;
     rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr stop_publisher_;
 };

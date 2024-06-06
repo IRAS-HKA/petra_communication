@@ -12,6 +12,8 @@ Screen::Screen() : Node("Screen")
             std::getline(stream, line);
             std::cout << line << std::endl;
         } });
+
+    RCLCPP_INFO(get_logger(), "Screen node started successfully.");
 }
 
 int main(int argc, char *argv[])
